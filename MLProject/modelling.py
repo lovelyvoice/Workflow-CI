@@ -92,31 +92,29 @@ with open('outputs/classification_report.json', 'w') as f:
 # ============================================================
 # MLFLOW LOGGING
 # ============================================================
-# ============================================================
-# MLFLOW LOGGING
-# ============================================================
-with mlflow.start_run(run_name="SVM_CI_Run", nested=True):
-    mlflow.log_param("kernel",    best_params['kernel'])
-    mlflow.log_param("C",         best_params['C'])
-    mlflow.log_param("gamma",     best_params['gamma'])
-    mlflow.log_param("cv_folds",  5)
+active_run = mlflow.active_run()
 
-    mlflow.log_metric("accuracy",           accuracy)
-    mlflow.log_metric("precision_weighted", precision)
-    mlflow.log_metric("recall_weighted",    recall)
-    mlflow.log_metric("f1_weighted",        f1)
-    mlflow.log_metric("roc_auc_weighted",   roc_auc)
-    mlflow.log_metric("cv_mean_score",      cv_scores.mean())
-    mlflow.log_metric("cv_std_score",       cv_scores.std())
+mlflow.log_param("kernel",    best_params['kernel'])
+mlflow.log_param("C",         best_params['C'])
+mlflow.log_param("gamma",     best_params['gamma'])
+mlflow.log_param("cv_folds",  5)
 
-    mlflow.sklearn.log_model(best_model, artifact_path="svm_model")
-    mlflow.log_artifact('outputs/confusion_matrix.png')
-    mlflow.log_artifact('outputs/classification_report.json')
+mlflow.log_metric("accuracy",           accuracy)
+mlflow.log_metric("precision_weighted", precision)
+mlflow.log_metric("recall_weighted",    recall)
+mlflow.log_metric("f1_weighted",        f1)
+mlflow.log_metric("roc_auc_weighted",   roc_auc)
+mlflow.log_metric("cv_mean_score",      cv_scores.mean())
+mlflow.log_metric("cv_std_score",       cv_scores.std())
 
-    mlflow.set_tag("model_type", "SVM")
-    mlflow.set_tag("dataset",    "Iris")
+mlflow.sklearn.log_model(best_model, artifact_path="svm_model")
+mlflow.log_artifact('outputs/confusion_matrix.png')
+mlflow.log_artifact('outputs/classification_report.json')
 
-    print(f"\nRun ID: {mlflow.active_run().info.run_id}")
-    print(f"Accuracy: {accuracy:.4f}")
+mlflow.set_tag("model_type", "SVM")
+mlflow.set_tag("dataset",    "Iris")
+
+print(f"\nRun ID: {active_run.info.run_id}")
+print(f"Accuracy: {accuracy:.4f}")
 
 print("\nCI Modelling selesai!")
