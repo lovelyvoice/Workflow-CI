@@ -17,8 +17,8 @@ import json
 # ============================================================
 # LOAD DATASET
 # ============================================================
-train_df = pd.read_csv('MLProject/iris_preprocessing/iris_train.csv')
-test_df  = pd.read_csv('MLProject/iris_preprocessing/iris_test.csv')
+train_df = pd.read_csv('iris_preprocessing/iris_train.csv')
+test_df  = pd.read_csv('iris_preprocessing/iris_test.csv')
 
 feature_cols = ['sepal length (cm)', 'sepal width (cm)',
                 'petal length (cm)', 'petal width (cm)']
