@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/0/0c4bf68a885b4c50a5b1ca1e1993f7d9/artifacts
+end_time: 1780592654608
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0c4bf68a885b4c50a5b1ca1e1993f7d9
+run_name: gentle-lynx-820
+run_uuid: 0c4bf68a885b4c50a5b1ca1e1993f7d9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1780592646002
+status: 3
+tags: []
+user_id: runner
