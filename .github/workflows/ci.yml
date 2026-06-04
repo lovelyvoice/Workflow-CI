@@ -26,7 +26,7 @@ jobs:
         run: |
           mlflow run MLProject/ --env-manager=local
         env:
-          MLFLOW_TRACKING_URI: mlruns
+          MLFLOW_TRACKING_URI: file:${{ github.workspace }}/mlruns
 
       - name: Upload artefak ke GitHub Actions
         uses: actions/upload-artifact@v4
@@ -55,12 +55,13 @@ jobs:
       - name: Get latest Run ID
         id: get_run_id
         run: |
-          EXP_ID=$(cat mlruns/meta.yaml 2>/dev/null | grep experiment_id | awk '{print $2}' || echo "1")
+          EXP_ID=$(ls mlruns/ | grep -v '0' | head -1)
           RUN_ID=$(ls mlruns/${EXP_ID}/ | grep -v meta | head -1)
           echo "RUN_ID=${RUN_ID}" >> $GITHUB_OUTPUT
           echo "EXP_ID=${EXP_ID}" >> $GITHUB_OUTPUT
-          echo "Found Run ID: ${RUN_ID}"
-
+        env:
+          MLFLOW_TRACKING_URI: file:${{ github.workspace }}/mlruns
+          
       - name: Build Docker Image dengan mlflow
         run: |
           mlflow models build-docker \
