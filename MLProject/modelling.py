@@ -117,4 +117,4 @@ mlflow.set_tag("dataset",    "Iris")
 print(f"\nRun ID: {run.info.run_id if run else 'N/A'}")
 print(f"Accuracy: {accuracy:.4f}")
 
-print("\nCI Modelling selesai!")
+print("\nCI Modelling selesai")
