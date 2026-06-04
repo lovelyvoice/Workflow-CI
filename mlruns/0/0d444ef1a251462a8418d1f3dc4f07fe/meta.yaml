@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/0/0d444ef1a251462a8418d1f3dc4f07fe/artifacts
+end_time: 1780593825442
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0d444ef1a251462a8418d1f3dc4f07fe
+run_name: glamorous-snail-697
+run_uuid: 0d444ef1a251462a8418d1f3dc4f07fe
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1780593815827
+status: 3
+tags: []
+user_id: runner
