@@ -92,7 +92,7 @@ with open('outputs/classification_report.json', 'w') as f:
 # ============================================================
 # MLFLOW LOGGING
 # ============================================================
-active_run = mlflow.active_run()
+run = mlflow.last_active_run()
 
 mlflow.log_param("kernel",    best_params['kernel'])
 mlflow.log_param("C",         best_params['C'])
@@ -114,7 +114,7 @@ mlflow.log_artifact('outputs/classification_report.json')
 mlflow.set_tag("model_type", "SVM")
 mlflow.set_tag("dataset",    "Iris")
 
-print(f"\nRun ID: {active_run.info.run_id}")
+print(f"\nRun ID: {run.info.run_id if run else 'N/A'}")
 print(f"Accuracy: {accuracy:.4f}")
 
 print("\nCI Modelling selesai!")
