@@ -46,7 +46,8 @@ jobs:
           git add mlruns/ || true
           git add outputs/ || true
           git diff --staged --quiet || git commit -m "Auto: update model artifacts [skip ci]"
-          git push
+          git pull --rebase origin main
+          git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
