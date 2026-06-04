@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/0/d1a7756076ec41bc82b67d0da4c4c22d/artifacts
+end_time: 1780594800884
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: d1a7756076ec41bc82b67d0da4c4c22d
+run_name: nosy-lamb-442
+run_uuid: d1a7756076ec41bc82b67d0da4c4c22d
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1780594789738
+status: 3
+tags: []
+user_id: runner
