@@ -92,7 +92,7 @@ with open('outputs/classification_report.json', 'w') as f:
 # ============================================================
 # MLFLOW LOGGING
 # ============================================================
-mlflow.set_experiment("Iris_SVM_CI")
+with mlflow.start_run(run_name="SVM_CI_Run", nested=True):
 
 with mlflow.start_run(run_name="SVM_CI_Run"):
     mlflow.log_param("kernel",    best_params['kernel'])
