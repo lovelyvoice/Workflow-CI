@@ -92,7 +92,6 @@ with open('outputs/classification_report.json', 'w') as f:
 # ============================================================
 # MLFLOW LOGGING
 # ============================================================
-mlflow.set_tracking_uri(os.environ.get("MLFLOW_TRACKING_URI", "mlruns"))
 mlflow.set_experiment("Iris_SVM_CI")
 
 with mlflow.start_run(run_name="SVM_CI_Run"):
