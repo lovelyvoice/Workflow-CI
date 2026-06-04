@@ -92,9 +92,10 @@ with open('outputs/classification_report.json', 'w') as f:
 # ============================================================
 # MLFLOW LOGGING
 # ============================================================
+# ============================================================
+# MLFLOW LOGGING
+# ============================================================
 with mlflow.start_run(run_name="SVM_CI_Run", nested=True):
-
-with mlflow.start_run(run_name="SVM_CI_Run"):
     mlflow.log_param("kernel",    best_params['kernel'])
     mlflow.log_param("C",         best_params['C'])
     mlflow.log_param("gamma",     best_params['gamma'])
