@@ -60,17 +60,15 @@ jobs:
       - name: Get latest Run ID
         id: get_run_id
         run: |
-          EXP_ID=$(ls mlruns/ | grep -v '0' | head -1)
-          RUN_ID=$(ls mlruns/${EXP_ID}/ | grep -v meta | head -1)
+          RUN_ID=$(ls mlruns/0/ | grep -v meta | head -1)
           echo "RUN_ID=${RUN_ID}" >> $GITHUB_OUTPUT
-          echo "EXP_ID=${EXP_ID}" >> $GITHUB_OUTPUT
         env:
           MLFLOW_TRACKING_URI: file:${{ github.workspace }}/mlruns
 
       - name: Build Docker Image dengan mlflow
         run: |
           mlflow models build-docker \
-            --model-uri "mlruns/${{ steps.get_run_id.outputs.EXP_ID }}/${{ steps.get_run_id.outputs.RUN_ID }}/artifacts/svm_model" \
+            --model-uri "mlruns/0/${{ steps.get_run_id.outputs.RUN_ID }}/artifacts/svm_model" \
             --name "${{ secrets.DOCKER_USERNAME }}/iris-svm-model"
 
       - name: Push Docker Image ke Docker Hub
