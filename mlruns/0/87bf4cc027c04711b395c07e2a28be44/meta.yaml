@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/0/87bf4cc027c04711b395c07e2a28be44/artifacts
+end_time: 1780591475185
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 87bf4cc027c04711b395c07e2a28be44
+run_name: sassy-wolf-862
+run_uuid: 87bf4cc027c04711b395c07e2a28be44
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1780591465448
+status: 3
+tags: []
+user_id: runner
