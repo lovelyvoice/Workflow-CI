@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/0/eb77dc1b97454c518e9cf6954ff7f9f5/artifacts
+end_time: 1780592754453
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: eb77dc1b97454c518e9cf6954ff7f9f5
+run_name: abrasive-toad-712
+run_uuid: eb77dc1b97454c518e9cf6954ff7f9f5
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1780592742678
+status: 3
+tags: []
+user_id: runner
