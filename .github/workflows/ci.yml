@@ -23,7 +23,7 @@ jobs:
 
       - name: Install MLflow
         run: |
-          pip install mlflow==2.19.0 scikit-learn==1.5.2 pandas numpy matplotlib seaborn
+          pip install mlflow==2.21.0 scikit-learn==1.5.2 pandas numpy matplotlib seaborn
 
       - name: Train model via MLflow Project
         run: |
