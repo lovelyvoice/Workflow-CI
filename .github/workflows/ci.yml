@@ -34,20 +34,28 @@ jobs:
           name: mlruns-artifacts
           path: MLProject/mlruns/
 
-      # Ambil RUN_ID menggunakan Python
+      # Ambil RUN_ID menggunakan Python dengan mencari di SEMUA eksperimen
       - name: Get latest MLflow run_id
         working-directory: MLProject
         shell: python
         run: |
           import mlflow
           import os
-          runs = mlflow.search_runs(experiment_ids=["0"], max_results=1, order_by=["attributes.start_time DESC"])
+          
+          # Ambil semua ID eksperimen yang ada
+          experiments = mlflow.search_experiments()
+          all_exp_ids = [exp.experiment_id for exp in experiments]
+          
+          # Cari run terbaru dari semua eksperimen
+          runs = mlflow.search_runs(experiment_ids=all_exp_ids, max_results=1, order_by=["attributes.start_time DESC"])
           
           if not runs.empty:
               run_id = runs.iloc[0]["run_id"]
+              exp_id = runs.iloc[0]["experiment_id"]
               with open(os.environ['GITHUB_ENV'], 'a') as f:
                   f.write(f"RUN_ID={run_id}\n")
-              print(f"Successfully found Run ID: {run_id}")
+                  f.write(f"EXP_ID={exp_id}\n") # Simpan juga ID eksperimennya
+              print(f"Successfully found Run ID: {run_id} in Experiment: {exp_id}")
           else:
               print("No runs found in MLflow tracking!")
               exit(1)
@@ -62,7 +70,7 @@ jobs:
           
           echo "Menggunakan RUN_ID: ${{ env.RUN_ID }}"
           
-          clean_env/bin/python -m mlflow models build-docker -m mlruns/0/${{ env.RUN_ID }}/artifacts/svm_model -n ${{ secrets.DOCKER_USERNAME }}/iris-svm-model:latest
+          clean_env/bin/python -m mlflow models build-docker -m mlruns/${{ env.EXP_ID }}/${{ env.RUN_ID }}/artifacts/svm_model -n ${{ secrets.DOCKER_USERNAME }}/iris-svm-model:latest
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
