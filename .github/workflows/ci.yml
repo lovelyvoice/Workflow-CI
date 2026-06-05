@@ -65,9 +65,11 @@ jobs:
 
       - name: Build Docker Image dengan mlflow
         run: |
+          pip install docker==6.1.3
           mlflow models build-docker \
             --model-uri "mlruns/0/${{ steps.get_run_id.outputs.RUN_ID }}/artifacts/svm_model" \
-            --name "${{ secrets.DOCKER_USERNAME }}/iris-svm-model"
+            --name "${{ secrets.DOCKER_USERNAME }}/iris-svm-model" \
+            --env-manager local
 
       - name: Push Docker Image ke Docker Hub
         run: |
