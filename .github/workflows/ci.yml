@@ -73,6 +73,8 @@ jobs:
             --model-uri "mlruns/0/${{ steps.get_run_id.outputs.RUN_ID }}/artifacts/svm_model" \
             --name "${{ secrets.DOCKER_USERNAME }}/iris-svm-model" \
             --env-manager local
+        env:
+          DOCKER_HOST: unix:///var/run/docker.sock
 
       - name: Push Docker Image ke Docker Hub
         run: |
