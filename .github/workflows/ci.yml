@@ -40,19 +40,22 @@ jobs:
       # 3. Build Docker Image dengan mlflow build-docker
       - name: Build Docker Image
         run: |
-          # 1. Cuci bersih library yang berpotensi bentrok
-          python -m pip uninstall -y docker docker-py requests urllib3
-          # 2. Install kembali dengan versi super terbaru yang 100% kompatibel
-          python -m pip install "requests>=2.32.2" "docker>=7.1.0" "urllib3>=2.0.0"
-          
           cd Workflow-CI/MLProject
+          
+          # Bikin ruang isolasi (virtual environment) agar terlepas dari kutukan library bawaan Ubuntu
+          python -m venv clean_env
+          source clean_env/bin/activate
+          
+          # Install mlflow dan versi library docker terbaru di dalam ruang isolasi
+          pip install mlflow "docker>=7.1.0" "requests>=2.32.2"
+          
           # Mengambil Run ID terbaru secara dinamis (mengabaikan meta.yaml)
           RUN_ID=$(ls -t mlruns/0 | grep -v meta.yaml | head -n 1)
           echo "Menggunakan RUN_ID: $RUN_ID"
           
-          # Membangun docker image dari model MLflow
+          # Membangun docker image dari model MLflow MENGGUNAKAN MLflow dari dalam ruang isolasi
           mlflow models build-docker -m mlruns/0/$RUN_ID/artifacts/svm_model -n ${{ secrets.DOCKERHUB_USERNAME }}/iris-svm-model:latest
-          
+
       # 4. Login ke Docker Hub & Push
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
