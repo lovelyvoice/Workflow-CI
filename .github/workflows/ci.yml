@@ -68,7 +68,9 @@ jobs:
 
       - name: Build Docker Image dengan mlflow
         run: |
-          pip install docker==4.4.4 requests==2.27.1
+          # Patch MLflow docker_utils untuk pakai subprocess instead of Python SDK
+          MLFLOW_PATH=$(python -c "import mlflow; import os; print(os.path.dirname(mlflow.__file__))")
+          sed -i 's/client = docker.from_env()/import subprocess; subprocess.run(["docker", "build", "-t", image_name, context_dir], check=True); return/g' $MLFLOW_PATH/models/docker_utils.py
           mlflow models build-docker \
             --model-uri "mlruns/0/${{ steps.get_run_id.outputs.RUN_ID }}/artifacts/svm_model" \
             --name "${{ secrets.DOCKER_USERNAME }}/iris-svm-model" \
