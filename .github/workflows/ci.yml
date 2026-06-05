@@ -12,14 +12,16 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # MENGGUNAKAN PYTHON 3.12 (SARAN PENGUJI)
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.12'
 
+      # MENGGUNAKAN MLFLOW 2.19.0 (SARAN PENGUJI)
       - name: Install Dependencies
         run: |
-          pip install mlflow scikit-learn pandas
+          pip install mlflow==2.19.0 scikit-learn pandas
 
       - name: Run MLProject (Re-training)
         run: |
@@ -50,13 +52,13 @@ jobs:
               print("No runs found in MLflow tracking!")
               exit(1)
 
-      # Build Docker menggunakan Virtual Environment bersih
+      # Build Docker Image menggunakan Venv terisolasi
       - name: Build Docker Image
         run: |
           cd MLProject
           
           python -m venv clean_env
-          clean_env/bin/python -m pip install mlflow "docker>=7.1.0" "requests>=2.32.2" urllib3
+          clean_env/bin/python -m pip install mlflow==2.19.0 "docker>=7.1.0" "requests>=2.32.2" urllib3
           
           echo "Menggunakan RUN_ID: ${{ env.RUN_ID }}"
           
