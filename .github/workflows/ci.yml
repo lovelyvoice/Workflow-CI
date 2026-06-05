@@ -17,10 +17,12 @@ jobs:
         with:
           python-version: '3.10'
 
-      # Install dependencies & Fix error Docker URL scheme
+      # Install dependencies & Fix error Docker URL scheme secara paksa
       - name: Install Dependencies
         run: |
-          pip install mlflow scikit-learn pandas "requests<2.32.0" "urllib3<2" docker
+          python -m pip install --upgrade pip
+          pip install mlflow scikit-learn pandas
+          pip install --force-reinstall "docker==6.1.3" "requests==2.31.0" "urllib3==1.26.18"
 
       # 1. Melakukan Re-training menggunakan MLflow Project
       - name: Run MLProject (Re-training)
