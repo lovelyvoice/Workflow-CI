@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/0/0771201549b74b99bd44dc5c764d9abf/artifacts
+end_time: 1780631588815
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 0771201549b74b99bd44dc5c764d9abf
+run_name: omniscient-cat-783
+run_uuid: 0771201549b74b99bd44dc5c764d9abf
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1780631579648
+status: 3
+tags: []
+user_id: runner
