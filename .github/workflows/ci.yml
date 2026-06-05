@@ -21,7 +21,7 @@ jobs:
       # MENGGUNAKAN MLFLOW 2.19.0 (SARAN PENGUJI)
       - name: Install Dependencies
         run: |
-          pip install mlflow==2.19.0 scikit-learn pandas
+          pip install mlflow==2.19.0 scikit-learn pandas numpy matplotlib seaborn dagshub
 
       - name: Run MLProject (Re-training)
         run: |
