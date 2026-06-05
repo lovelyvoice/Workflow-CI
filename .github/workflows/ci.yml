@@ -10,7 +10,7 @@ jobs:
     
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -23,18 +23,18 @@ jobs:
 
       - name: Run MLProject (Re-training)
         run: |
-          cd Workflow-CI/MLProject
+          cd MLProject
           mlflow run . --no-conda
           
       - name: Simpan Artefak ke GitHub
         uses: actions/upload-artifact@v4
         with:
           name: mlruns-artifacts
-          path: Workflow-CI/MLProject/mlruns/
+          path: MLProject/mlruns/
 
-      # Step baru dari forum untuk mengambil RUN_ID dengan Python
+      # Ambil RUN_ID menggunakan Python
       - name: Get latest MLflow run_id
-        working-directory: Workflow-CI/MLProject
+        working-directory: MLProject
         shell: python
         run: |
           import mlflow
@@ -50,21 +50,20 @@ jobs:
               print("No runs found in MLflow tracking!")
               exit(1)
 
-      # Build Docker dengan Venv untuk menghindari error http+docker bawaan Ubuntu
+      # Build Docker menggunakan Virtual Environment bersih
       - name: Build Docker Image
         run: |
-          cd Workflow-CI/MLProject
+          cd MLProject
           
-          # Buat ruang isolasi
           python -m venv clean_env
           clean_env/bin/python -m pip install mlflow "docker>=7.1.0" "requests>=2.32.2" urllib3
           
-          echo "Menggunakan RUN_ID dari step sebelumnya: ${{ env.RUN_ID }}"
+          echo "Menggunakan RUN_ID: ${{ env.RUN_ID }}"
           
           clean_env/bin/python -m mlflow models build-docker -m mlruns/0/${{ env.RUN_ID }}/artifacts/svm_model -n ${{ secrets.DOCKERHUB_USERNAME }}/iris-svm-model:latest
 
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASSWORD }}
