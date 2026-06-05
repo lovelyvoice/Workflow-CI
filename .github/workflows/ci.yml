@@ -17,46 +17,52 @@ jobs:
         with:
           python-version: '3.10'
 
-      # Install dependencies & Fix error Docker URL scheme secara paksa
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install mlflow scikit-learn pandas
-          pip install --force-reinstall "docker==6.1.3" "requests==2.31.0" "urllib3==1.26.18"
 
-      # 1. Melakukan Re-training menggunakan MLflow Project
       - name: Run MLProject (Re-training)
         run: |
           cd Workflow-CI/MLProject
           mlflow run . --no-conda
           
-      # 2. Upload Artefak (Menyimpan artefak ke GitHub Repository)
       - name: Simpan Artefak ke GitHub
         uses: actions/upload-artifact@v3
         with:
           name: mlruns-artifacts
           path: Workflow-CI/MLProject/mlruns/
 
-      # 3. Build Docker Image dengan mlflow build-docker
+      # Step baru dari forum untuk mengambil RUN_ID dengan Python
+      - name: Get latest MLflow run_id
+        working-directory: Workflow-CI/MLProject
+        shell: python
+        run: |
+          import mlflow
+          import os
+          runs = mlflow.search_runs(experiment_ids=["0"], max_results=1, order_by=["attributes.start_time DESC"])
+          
+          if not runs.empty:
+              run_id = runs.iloc[0]["run_id"]
+              with open(os.environ['GITHUB_ENV'], 'a') as f:
+                  f.write(f"RUN_ID={run_id}\n")
+              print(f"Successfully found Run ID: {run_id}")
+          else:
+              print("No runs found in MLflow tracking!")
+              exit(1)
+
+      # Build Docker dengan Venv untuk menghindari error http+docker bawaan Ubuntu
       - name: Build Docker Image
         run: |
           cd Workflow-CI/MLProject
           
-          # Bikin ruang isolasi (virtual environment) agar terlepas dari kutukan library bawaan Ubuntu
+          # Buat ruang isolasi
           python -m venv clean_env
-          source clean_env/bin/activate
+          clean_env/bin/python -m pip install mlflow "docker>=7.1.0" "requests>=2.32.2" urllib3
           
-          # Install mlflow dan versi library docker terbaru di dalam ruang isolasi
-          pip install mlflow "docker>=7.1.0" "requests>=2.32.2"
+          echo "Menggunakan RUN_ID dari step sebelumnya: ${{ env.RUN_ID }}"
           
-          # Mengambil Run ID terbaru secara dinamis (mengabaikan meta.yaml)
-          RUN_ID=$(ls -t mlruns/0 | grep -v meta.yaml | head -n 1)
-          echo "Menggunakan RUN_ID: $RUN_ID"
-          
-          # Membangun docker image dari model MLflow MENGGUNAKAN MLflow dari dalam ruang isolasi
-          mlflow models build-docker -m mlruns/0/$RUN_ID/artifacts/svm_model -n ${{ secrets.DOCKERHUB_USERNAME }}/iris-svm-model:latest
+          clean_env/bin/python -m mlflow models build-docker -m mlruns/0/${{ env.RUN_ID }}/artifacts/svm_model -n ${{ secrets.DOCKERHUB_USERNAME }}/iris-svm-model:latest
 
-      # 4. Login ke Docker Hub & Push
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
