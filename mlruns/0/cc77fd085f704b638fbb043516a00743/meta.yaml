@@ -1,0 +1,15 @@
+artifact_uri: file:///home/runner/work/Workflow-CI/Workflow-CI/mlruns/0/cc77fd085f704b638fbb043516a00743/artifacts
+end_time: 1780631445704
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: cc77fd085f704b638fbb043516a00743
+run_name: skillful-ram-625
+run_uuid: cc77fd085f704b638fbb043516a00743
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1780631438570
+status: 3
+tags: []
+user_id: runner
