@@ -1,0 +1,15 @@
+artifact_uri: file:///D:/kuliah/semester%206/PIJAK/Workflow-CI/mlruns/0/ae4bbcd414f14247a565eea648204b1c/artifacts
+end_time: 1780743563846
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: ae4bbcd414f14247a565eea648204b1c
+run_name: orderly-dove-129
+run_uuid: ae4bbcd414f14247a565eea648204b1c
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1780743550885
+status: 3
+tags: []
+user_id: monar
