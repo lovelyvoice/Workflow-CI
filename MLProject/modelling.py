@@ -17,16 +17,15 @@ import json
 # ============================================================
 # LOAD DATASET
 # ============================================================
-train_df = pd.read_csv('iris_preprocessing/iris_train.csv')
-test_df  = pd.read_csv('iris_preprocessing/iris_test.csv')
+train_df = pd.read_csv('banknote_preprocessing/banknote_train.csv')
+test_df  = pd.read_csv('banknote_preprocessing/banknote_test.csv')
 
-feature_cols = ['sepal length (cm)', 'sepal width (cm)',
-                'petal length (cm)', 'petal width (cm)']
+feature_cols = ['variance', 'skewness', 'curtosis', 'entropy']
 
 X_train = train_df[feature_cols]
-y_train = train_df['species']
+y_train = train_df['class']
 X_test  = test_df[feature_cols]
-y_test  = test_df['species']
+y_test  = test_df['class']
 
 print(f"Train shape: {X_train.shape}, Test shape: {X_test.shape}")
 
@@ -55,12 +54,11 @@ y_pred  = best_model.predict(X_test)
 y_proba = best_model.predict_proba(X_test)
 
 accuracy  = accuracy_score(y_test, y_pred)
-precision = precision_score(y_test, y_pred, average='weighted')
-recall    = recall_score(y_test, y_pred, average='weighted')
-f1        = f1_score(y_test, y_pred, average='weighted')
+precision = precision_score(y_test, y_pred)
+recall    = recall_score(y_test, y_pred)
+f1        = f1_score(y_test, y_pred)
 cv_scores = cross_val_score(best_model, X_train, y_train, cv=5)
-y_bin     = label_binarize(y_test, classes=[0, 1, 2])
-roc_auc   = roc_auc_score(y_bin, y_proba, multi_class='ovr', average='weighted')
+roc_auc   = roc_auc_score(y_test, y_proba[:, 1])
 
 # ============================================================
 # ARTEFAK
@@ -71,9 +69,9 @@ os.makedirs('outputs', exist_ok=True)
 cm = confusion_matrix(y_test, y_pred)
 plt.figure(figsize=(7, 5))
 sns.heatmap(cm, annot=True, fmt='d', cmap='Blues',
-            xticklabels=['setosa', 'versicolor', 'virginica'],
-            yticklabels=['setosa', 'versicolor', 'virginica'])
-plt.title('Confusion Matrix – SVM Iris')
+            xticklabels=['Asli (0)', 'Palsu (1)'],
+            yticklabels=['Asli (0)', 'Palsu (1)'])
+plt.title('Confusion Matrix – SVM Banknote')
 plt.xlabel('Predicted')
 plt.ylabel('Actual')
 plt.tight_layout()
@@ -83,7 +81,7 @@ plt.close()
 # Classification report
 report = classification_report(
     y_test, y_pred,
-    target_names=['setosa', 'versicolor', 'virginica'],
+    target_names=['Asli (0)', 'Palsu (1)'],
     output_dict=True
 )
 with open('outputs/classification_report.json', 'w') as f:
@@ -112,7 +110,7 @@ mlflow.log_artifact('outputs/confusion_matrix.png')
 mlflow.log_artifact('outputs/classification_report.json')
 
 mlflow.set_tag("model_type", "SVM")
-mlflow.set_tag("dataset",    "Iris")
+mlflow.set_tag("dataset",    "Banknote_Authentication")
 
 print(f"\nRun ID: {run.info.run_id if run else 'N/A'}")
 print(f"Accuracy: {accuracy:.4f}")
