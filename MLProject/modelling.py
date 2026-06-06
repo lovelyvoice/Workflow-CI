@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import os
 import json
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
 
 # ============================================================
 # LOAD DATASET
@@ -33,14 +35,18 @@ print(f"Train shape: {X_train.shape}, Test shape: {X_test.shape}")
 # HYPERPARAMETER TUNING
 # ============================================================
 param_grid = {
-    'C'     : [0.1, 1, 10],
-    'gamma' : ['scale', 'auto'],
-    'kernel': ['rbf', 'linear']
+    'svc__C'     : [0.1, 1, 10],
+    'svc__gamma' : ['scale', 'auto'],
+    'svc__kernel': ['rbf', 'linear']
 }
 
 print("Memulai GridSearchCV...")
-base_model  = SVC(random_state=42, probability=True)
-grid_search = GridSearchCV(base_model, param_grid, cv=5, scoring='accuracy', n_jobs=-1)
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('svc', SVC(random_state=42, probability=True))
+])
+
+grid_search = GridSearchCV(pipeline, param_grid, cv=5, scoring='accuracy', n_jobs=1)
 grid_search.fit(X_train, y_train)
 
 best_params = grid_search.best_params_
@@ -92,9 +98,9 @@ with open('outputs/classification_report.json', 'w') as f:
 # ============================================================
 run = mlflow.last_active_run()
 
-mlflow.log_param("kernel",    best_params['kernel'])
-mlflow.log_param("C",         best_params['C'])
-mlflow.log_param("gamma",     best_params['gamma'])
+mlflow.log_param("kernel",    best_params['svc__kernel'])
+mlflow.log_param("C",         best_params['svc__C'])
+mlflow.log_param("gamma",     best_params['svc__gamma'])
 mlflow.log_param("cv_folds",  5)
 
 mlflow.log_metric("accuracy",           accuracy)
