@@ -75,7 +75,7 @@ jobs:
           
           echo "Menggunakan RUN_ID: ${{ env.RUN_ID }}"
           
-          clean_env/bin/python -m mlflow models build-docker -m mlruns/${{ env.EXP_ID }}/${{ env.RUN_ID }}/artifacts/svm_model -n ${{ secrets.DOCKER_USERNAME }}/banknote-svm-model:latest
+          clean_env/bin/python -m mlflow models build-docker -m mlruns/${{ env.EXP_ID }}/${{ env.RUN_ID }}/artifacts/model -n ${{ secrets.DOCKER_USERNAME }}/banknote-svm-model:latest
           
       # 7. Login ke Docker Hub
       - name: Log in to Docker Hub
