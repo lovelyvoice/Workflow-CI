@@ -24,23 +24,25 @@ print(f"Train shape: {X_train.shape}, Test shape: {X_test.shape}")
 # ============================================================
 # MLFLOW AUTOLOG
 # ============================================================
-mlflow.set_experiment("Banknote_SVM_Basic")
 mlflow.autolog()  # Kriteria 2 Basic: WAJIB MENGGUNAKAN AUTOLOG
 
-with mlflow.start_run(run_name="SVM_Basic_Autolog"):
-    print("Memulai pelatihan model SVM Basic (tanpa hyperparameter tuning)...")
-    
-    # Model sederhana tanpa tuning dengan Pipeline untuk Scaling
-    pipeline = Pipeline([
-        ('scaler', StandardScaler()),
-        ('svc', SVC(random_state=42))
-    ])
-    
-    pipeline.fit(X_train, y_train)
-    
-    y_pred = pipeline.predict(X_test)
-    accuracy = accuracy_score(y_test, y_pred)
-    
-    print(f"\nRun ID: {mlflow.active_run().info.run_id}")
-    print(f"Accuracy: {accuracy:.4f}")
-    print("\nModelling Basic selesai! Cek MLflow UI.")
+print("Memulai pelatihan model SVM Basic (tanpa hyperparameter tuning)...")
+
+# Model sederhana tanpa tuning dengan Pipeline untuk Scaling
+pipeline = Pipeline([
+    ('scaler', StandardScaler()),
+    ('svc', SVC(random_state=42))
+])
+
+pipeline.fit(X_train, y_train)
+
+y_pred = pipeline.predict(X_test)
+accuracy = accuracy_score(y_test, y_pred)
+
+active_run = mlflow.active_run()
+if active_run:
+    print(f"\nRun ID: {active_run.info.run_id}")
+else:
+    print("\nRun ID: N/A")
+print(f"Accuracy: {accuracy:.4f}")
+print("\nModelling Basic selesai! Cek MLflow UI.")
