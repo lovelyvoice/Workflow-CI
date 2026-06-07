@@ -8,17 +8,16 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import Pipeline
 
 # ============================================================
-# LOAD DATASET
+# LOAD DATASET PREPROCESSED
 # ============================================================
-train_df = pd.read_csv('banknote_preprocessing/banknote_train.csv')
-test_df  = pd.read_csv('banknote_preprocessing/banknote_test.csv')
+df = pd.read_csv('banknote_preprocessing/banknote_preprocessed.csv')
 
 feature_cols = ['variance', 'skewness', 'curtosis', 'entropy']
+X = df[feature_cols]
+y = df['class']
 
-X_train = train_df[feature_cols]
-y_train = train_df['class']
-X_test  = test_df[feature_cols]
-y_test  = test_df['class']
+# Data Splitting dilakukan eksklusif di modelling
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 
 print(f"Train shape: {X_train.shape}, Test shape: {X_test.shape}")
 
@@ -31,7 +30,7 @@ mlflow.autolog()  # Kriteria 2 Basic: WAJIB MENGGUNAKAN AUTOLOG
 with mlflow.start_run(run_name="SVM_Basic_Autolog"):
     print("Memulai pelatihan model SVM Basic (tanpa hyperparameter tuning)...")
     
-    # Model sederhana tanpa tuning
+    # Model sederhana tanpa tuning dengan Pipeline untuk Scaling
     pipeline = Pipeline([
         ('scaler', StandardScaler()),
         ('svc', SVC(random_state=42))
