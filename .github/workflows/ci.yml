@@ -1,4 +1,4 @@
-name: Workflow CI - Iris SVM
+name: Workflow CI - Banknote SVM
 
 on:
   push:
